@@ -20,3 +20,21 @@ python -m venv venv
 source venv/Scripts/activate   # Windows
 pip install -r requirements.txt
 python app.py
+
+Backend runs at: http://127.0.0.1:5000
+
+Open frontend: frontend/index.html
+
+API Endpoints
+
+POST /infer → Upload image to classify
+
+GET /pickups → Retrieve pickup requests
+
+POST /pickups → Create new pickup request
+
+Tech Stack
+
+Python 3 | Flask | TensorFlow/Keras | PIL | NumPy
+
+HTML | CSS | JavaScript
