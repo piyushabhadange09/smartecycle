@@ -1,0 +1,87 @@
+1.Use-Case :--->
+@startuml
+left to right direction
+actor Citizen
+actor Volunteer
+actor Admin
+actor Recycler
+actor "ML Service" as ML
+
+Citizen --> (Upload Image)
+Citizen --> (Request Pickup)
+Volunteer --> (Pickup Item)
+Recycler --> (Accept Batch)
+Admin --> (View Analytics)
+
+(Upload Image) --> ML
+(Request Pickup) --> (Pickup Item)
+@enduml
+
+
+2.Class :-->
+@startuml
+' Define classes
+class User {
+    +id: int
+    +name: String
+    +role: String
+}
+
+class Pickup {
+    +id: int
+    +address: String
+    +status: String
+    +scheduled_time: DateTime
+}
+
+class EWasteItem {
+    +id: int
+    +predicted_class: String
+    +confidence: float
+}
+
+class Vehicle {
+    +id: int
+    +capacity: int
+    +current_load: int
+}
+
+' Define relationships
+User "1" -- "0..*" Pickup : makes
+Pickup "1" -- "0..*" EWasteItem : contains
+Vehicle "1" -- "0..*" Pickup : assigned_to
+@enduml
+
+
+3.Seqence :--->
+@startuml
+actor Citizen
+participant Web
+participant Backend
+participant MLService
+
+Citizen -> Web: uploadImage()
+Web -> Backend: POST /infer (image)
+Backend -> MLService: predict(image)
+MLService --> Backend: {class, confidence}
+Backend --> Web: {class, confidence}
+Web --> Citizen: show result
+@enduml
+
+
+4.Activity :-->
+@startuml
+|Citizen|
+start
+:Take photo;
+:Upload photo;
+|MLService|
+:Infer & return class;
+|Backend|
+:Create pickup;
+|Volunteer|
+:Accept & collect;
+|Recycler|
+:Receive & update;
+stop
+@enduml

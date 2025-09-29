@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SmartE-Cycle Demo</title>
+    <style>
+      /* Reset & base styles */
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f4f9f7;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 420px;
+        max-width: 95%;
+      }
+
+      h2 {
+        margin-bottom: 1.2rem;
+        font-size: 1.6rem;
+        color: #2f8f6d;
+      }
+
+      input[type="file"] {
+        display: block;
+        margin: 1rem auto;
+        padding: 0.6rem;
+        border: 2px dashed #3bb4a1;
+        border-radius: 10px;
+        background: #f0faf8;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      input[type="file"]:hover {
+        background: #e6f7f3;
+      }
+
+      button {
+        background: #3bb4a1;
+        color: #fff;
+        border: none;
+        padding: 0.8rem 1.6rem;
+        border-radius: 12px;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        background: #329885;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(50, 152, 133, 0.4);
+      }
+
+      #result {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: #f9fdfc;
+        border-left: 4px solid #3bb4a1;
+        border-radius: 8px;
+        text-align: left;
+        font-size: 0.9rem;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      /* Modal styling */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 10;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background: rgba(0, 0, 0, 0.55);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 18px;
+        width: 380px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        animation: fadeIn 0.3s ease;
+        position: relative;
+      }
+
+      .modal-content h3 {
+        color: #2f8f6d;
+        margin-bottom: 1rem;
+      }
+
+      .modal-content input {
+        width: 100%;
+        margin: 0.6rem 0;
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+
+      .modal-content button {
+        margin-top: 1rem;
+        width: 100%;
+      }
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 16px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #666;
+      }
+
+      .close:hover {
+        color: #000;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Toast notification */
+      .toast {
+        visibility: hidden;
+        min-width: 260px;
+        margin-left: -130px;
+        background: #2f8f6d;
+        color: #fff;
+        text-align: center;
+        border-radius: 8px;
+        padding: 16px;
+        position: fixed;
+        z-index: 20;
+        left: 50%;
+        bottom: 30px;
+        font-size: 1rem;
+        opacity: 0;
+        transition: opacity 0.5s, bottom 0.5s;
+      }
+      .toast.show {
+        visibility: visible;
+        opacity: 1;
+        bottom: 50px;
+      }
+
+      /* Countdown Timer */
+      #countdown {
+        margin-top: 1rem;
+        font-size: 1rem;
+        color: #d35400;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>SmartE-Cycle — Upload Item</h2>
+      <input type="file" id="image" />
+      <button id="classify">Classify & Schedule Pickup</button>
+      <div id="result"></div>
+      <div id="countdown"></div>
+    </div>
+
+    <!-- Modal Popup -->
+    <div id="pickupModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h3>Schedule Pickup</h3>
+        <input type="text" id="name" placeholder="Your Name" required />
+        <input type="text" id="phone" placeholder="Phone Number" required />
+        <input type="text" id="address" placeholder="Pickup Address" required />
+        <button id="confirmPickup">Confirm Pickup</button>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+      let classifiedData = null;
+
+      document.getElementById("classify").onclick = async () => {
+        const file = document.getElementById("image").files[0];
+        if (!file) {
+          alert("Choose an image");
+          return;
+        }
+
+        const fd = new FormData();
+        fd.append("image", file);
+
+        const res = await fetch("http://127.0.0.1:5000/infer", {
+          method: "POST",
+          body: fd,
+        });
+        const j = await res.json();
+        classifiedData = j;
+
+        document.getElementById("result").innerHTML = `<pre>${JSON.stringify(
+          j,
+          null,
+          2
+        )}</pre>`;
+
+        // Open modal popup
+        document.getElementById("pickupModal").style.display = "flex";
+      };
+
+      // Close modal
+      document.getElementById("closeModal").onclick = () => {
+        document.getElementById("pickupModal").style.display = "none";
+      };
+      window.onclick = (e) => {
+        if (e.target == document.getElementById("pickupModal")) {
+          document.getElementById("pickupModal").style.display = "none";
+        }
+      };
+
+      // Confirm Pickup
+      document.getElementById("confirmPickup").onclick = async () => {
+        const name = document.getElementById("name").value;
+        const phone = document.getElementById("phone").value;
+        const address = document.getElementById("address").value;
+
+        if (!name || !phone || !address) {
+          showToast("⚠️ Please fill all fields");
+          return;
+        }
+
+        await fetch("http://127.0.0.1:5000/pickups", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            phone,
+            address,
+            class: classifiedData.class,
+            confidence: classifiedData.confidence,
+          }),
+        });
+
+        // Close modal
+        document.getElementById("pickupModal").style.display = "none";
+
+        // Success toast
+        showToast(
+          `✅ Pickup confirmed for ${classifiedData.class}! Our pickup boy will come soon.`
+        );
+
+        // Start countdown (5 min = 300 sec)
+        startCountdown(300);
+
+        // Open Google Maps with address
+        const encodedAddr = encodeURIComponent(address);
+        window.open(
+          `https://www.google.com/maps/search/?api=1&query=${encodedAddr}`,
+          "_blank"
+        );
+      };
+
+      // Toast function
+      function showToast(msg) {
+        const toast = document.getElementById("toast");
+        toast.innerHTML = msg;
+        toast.className = "toast show";
+        setTimeout(() => {
+          toast.className = toast.className.replace("show", "");
+        }, 4000);
+      }
+
+      // Countdown Timer
+      function startCountdown(seconds) {
+        const countdownEl = document.getElementById("countdown");
+        let remaining = seconds;
+
+        function updateTimer() {
+          const mins = Math.floor(remaining / 60);
+          const secs = remaining % 60;
+          countdownEl.textContent = `⏳ Pickup in: ${mins}m ${secs}s`;
+
+          if (remaining <= 0) {
+            countdownEl.textContent = "🚴 Pickup time reached!";
+            clearInterval(timer);
+          }
+          remaining--;
+        }
+        updateTimer();
+        const timer = setInterval(updateTimer, 1000);
+      }
+    </script>
+  </body>
+</html>

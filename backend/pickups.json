@@ -1,0 +1,98 @@
+[
+  {
+    "class": "battery",
+    "confidence": 0.9923060536384583,
+    "address": "Demo Address"
+  },
+  {
+    "class": "battery",
+    "confidence": 0.9923060536384583,
+    "address": "Demo Address"
+  },
+  {
+    "class": "phone",
+    "confidence": 0.9915227890014648,
+    "address": "Demo Address"
+  },
+  {
+    "class": "pcb",
+    "confidence": 0.6721700429916382,
+    "address": "Demo Address"
+  },
+  {
+    "class": "battery",
+    "confidence": 0.3897138237953186,
+    "address": "Demo Address"
+  },
+  {
+    "class": "pcb",
+    "confidence": 0.6721700429916382,
+    "address": "Demo Address"
+  },
+  {
+    "class": "pcb",
+    "confidence": 0.6721700429916382,
+    "address": "Demo Address"
+  },
+  {
+    "class": "pcb",
+    "confidence": 0.9999922513961792,
+    "address": "Demo Address"
+  },
+  {
+    "name": "Piyusha Prafull Bhadange",
+    "phone": "8080119391",
+    "address": "Pune",
+    "class": "pcb",
+    "confidence": 0.9999922513961792
+  },
+  {
+    "name": "Piyusha Prafull Bhadange",
+    "phone": "8080119391",
+    "address": "Pune",
+    "class": "pcb",
+    "confidence": 0.9999922513961792
+  },
+  {
+    "name": "Piyusha Prafull Bhadange",
+    "phone": "8080119391",
+    "address": "Pune",
+    "class": "pcb",
+    "confidence": 0.9999922513961792
+  },
+  {
+    "name": "Piyusha Prafull Bhadange",
+    "phone": "8080119391",
+    "address": "Pune",
+    "class": "pcb",
+    "confidence": 0.9999922513961792
+  },
+  {
+    "name": "Piyusha Prafull Bhadange",
+    "phone": "8080119391",
+    "address": "Delhi",
+    "class": "pcb",
+    "confidence": 0.9999922513961792
+  },
+  {
+    "name": "Piyusha Prafull Bhadange",
+    "phone": "8080119391",
+    "address": "Delhi",
+    "class": "pcb",
+    "confidence": 0.9999922513961792
+  },
+  {
+    "name": "Piyusha Prafull Bhadange",
+    "phone": "8080119391",
+    "address": "Delhi",
+    "class": "pcb",
+    "confidence": 0.9999922513961792
+  },
+  {
+    "name": "Piyusha Prafull Bhadange",
+    "phone": "8080119391",
+    "address": "Nashik",
+    "class": "phone",
+    "confidence": 0.9915227890014648
+  }
+]
