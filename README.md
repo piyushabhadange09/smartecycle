@@ -12,6 +12,25 @@
 
 ---
 
+## API Endpoints
+- **POST /infer:** Upload image to classify
+- **GET /pickups:** Retrieve pickup requests
+- **POST /pickups:** Create new pickup request 
+
+---
+
+## Tech Stack
+- **Python 3 | Flask | TensorFlow/Keras | PIL | NumPy**
+- **HTML | CSS | JavaScript**
+
+---
+
+## License
+
+- If you want, I can also **add a small section at the top with badges for Python, Flask, and TensorFlow** so it looks more professional on GitHub. Do you want me to do that?
+
+
+---
 ## Installation & Setup
 ```bash
 git clone https://github.com/<your-username>/smartecycle.git
@@ -24,17 +43,3 @@ python app.py
 Backend runs at: http://127.0.0.1:5000
 
 Open frontend: frontend/index.html
-
-API Endpoints
-
-POST /infer → Upload image to classify
-
-GET /pickups → Retrieve pickup requests
-
-POST /pickups → Create new pickup request
-
-Tech Stack
-
-Python 3 | Flask | TensorFlow/Keras | PIL | NumPy
-
-HTML | CSS | JavaScript
