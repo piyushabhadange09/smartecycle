@@ -31,6 +31,12 @@
 
 
 ---
+
+## Modules runs 
+- **Backend runs at: http://127.0.0.1:5000**
+- **Open frontend: frontend/index.html**
+
+---
 ## Installation & Setup
 ```bash
 git clone https://github.com/<your-username>/smartecycle.git
@@ -39,7 +45,3 @@ python -m venv venv
 source venv/Scripts/activate   # Windows
 pip install -r requirements.txt
 python app.py
-
-Backend runs at: http://127.0.0.1:5000
-
-Open frontend: frontend/index.html
